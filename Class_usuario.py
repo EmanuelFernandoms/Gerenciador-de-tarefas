@@ -1,23 +1,32 @@
-# class Usuario:
-#     def __init__(self, nome, email, senha):
-#         self.nome = nome
-#         self.email = email
-#         self.senha = senha
+from datetime import datetime, date
+from Class_tarefa import *
+import json
+import os
 
-#     def criar_tarefa (self):
-#         pass
 
-#     def criar_projeto (self):
-#         pass
+contas = {}
 
-#     def excluir_tarefa (self):
-#         pass
+data_folder = 'data'
+if not os.path.exists(data_folder):
+    os.makedirs(data_folder)
 
-#     def mudar_data_tarefa (self):
-#         pass
+data_file_contas = os.path.join(data_folder, 'contas.json')
 
-from Class_tarefa import Tarefa
-from Class_projeto import Projeto
+if os.path.exists(data_file_contas) and os.path.getsize(data_file_contas) > 0:
+        with open(data_file_contas, 'r') as f:
+            data = json.load(f)
+            if data:
+                contas = {int(key): value for key,value in data.items()}
+            else:
+                contas = {}
+
+count = max(contas.keys(), default=0) + 1
+count_tarefas = max(tarefas_dict.keys(), default=0) + 1
+count_projetos = max(projetos_dict.keys(), default=0) + 1
+
+
+
+
 
 class Usuario:
     def __init__(self, nome, email, senha):
@@ -26,15 +35,56 @@ class Usuario:
         self.senha = senha
         self.projetos = []
 
-    def criar_tarefa(self, projeto, titulo, descricao, data_vencimento, status="pendente"):
-        tarefa = Tarefa(titulo, descricao, data_vencimento, [self], status)
-        projeto.tarefas.append(tarefa)
-        return tarefa
+    def __str__(self):
+        return f"Nome: {self.nome}\nEmail: {self.email}\nSenha: {self.senha}\nProjetos: {self.projetos}"
 
-    def criar_projeto(self, nome, descricao):
-        projeto = Projeto(nome, descricao)
-        self.projetos.append(projeto)
-        return projeto
+    @classmethod
+    def buscar_por_email(cls, email):
+        for index, conta in contas.items():
+            if conta['email'] == email:
+                return index
+        return None
+
+    def criar_tarefa(self,nome, descricao, data_vencimento_str, index):
+        global count_tarefas  # Adicione esta linha para indicar que a variável está no escopo global
+
+        tarefas_dict[count_tarefas] = {
+            "nome": nome,
+            "descricao": descricao,
+            "data_vencimento": data_vencimento_str,
+            "status": "pendente"
+        }
+
+        with open(data_file_tarefas, 'w') as f:
+            json.dump(tarefas_dict, f, indent=4)
+
+        contas[index]['tarefas'].append(count_tarefas)
+        with open(data_file_contas, 'w') as f:
+            json.dump(contas, f, indent=4)
+        count_tarefas += 1
+
+
+
+
+
+    def criar_projeto(self, nome, descricao, index):
+        global count_projetos
+    
+        projetos_dict[count_projetos] = {
+            "nome": nome,
+            "descricao": descricao,
+            "tarefas": []
+        }
+        with open(data_file_projetos, 'w') as f:
+            json.dump(projetos_dict, f, indent=4)
+
+        contas[index]['projetos'].append(count_projetos)
+        with open(data_file_contas, 'w') as f:
+            json.dump(contas, f, indent=4)
+        count_projetos = max(tarefas_dict.keys(), default=0) + 1
+
+
+
 
     def excluir_tarefa(self, projeto, tarefa):
         if tarefa in projeto.tarefas:
@@ -42,6 +92,10 @@ class Usuario:
             return True
         else:
             return False
+        
+
+
+
 
     def mudar_data_tarefa(self, tarefa, nova_data):
         tarefa.data_vencimento = nova_data

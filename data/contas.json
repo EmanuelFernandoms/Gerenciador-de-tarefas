@@ -3,12 +3,21 @@
         "nome": "emanuel fernando mello da silva",
         "email": "emanuelfernandoms@gmail.com",
         "senha": "aaa",
-        "atividades": []
+        "tarefas": [
+            3,
+            4,
+            5,
+            6
+        ],
+        "projetos": [
+            1
+        ]
     },
     "2": {
         "nome": "aaa",
         "email": "aaa",
         "senha": "aaa",
-        "atividades": []
+        "tarefas": [],
+        "projetos": []
     }
 }
