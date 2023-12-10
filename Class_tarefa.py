@@ -28,6 +28,10 @@ if os.path.exists(data_file_projetos) and os.path.getsize(data_file_projetos) > 
         else:
             projetos_dict = {}
 
+
+
+
+
 class Atividade:
     def __init__(self, nome, descricao):
         self.nome = nome
@@ -37,8 +41,7 @@ class Atividade:
 
 class Tarefa(Atividade):
     def __init__(self, nome, descricao, data_vencimento, status="pendente"):
-        self.nome = nome
-        self.descricao = descricao
+        super().__init___(nome,descricao)
         self.data_vencimento = data_vencimento
         self.status = status
 

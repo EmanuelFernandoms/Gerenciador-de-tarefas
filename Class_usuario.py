@@ -96,3 +96,29 @@ class Usuario:
         with open(data_file_contas, 'w') as f:
             json.dump(contas, f, indent=4)
 
+    def adicionar_pessoa_projeto(self, id_projeto, index):
+
+        id_projeto = int(id_projeto)
+        if id_projeto not in projetos_dict:
+            print("ID da tarefa não encontrado.")
+            return
+        
+        contas[index]['projetos'].append(id_projeto)
+
+
+    def mudar_data_tarefa(self, id_tarefa, nova_data):
+        id_tarefa = int(id_tarefa)
+
+        # Verifique se a tarefa pertence à conta atual
+        if id_tarefa not in tarefas_dict:
+            print("ID da tarefa não encontrado.")
+            return False
+
+        # Altere a data da tarefa
+        tarefas_dict[id_tarefa]['data_vencimento'] = nova_data
+
+        with open(data_file_tarefas, 'w') as f:
+            json.dump(tarefas_dict, f, indent=4)
+
+        return True
+

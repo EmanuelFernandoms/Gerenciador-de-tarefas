@@ -3,60 +3,14 @@ from Class_usuario import *
 import tkinter as tk
 from tkinter import ttk
 import pwinput
-
 import sys
 import os
 import json
 from datetime import datetime, date
 
 
+
 if __name__ == '__main__':
-
-
-# criação do arquivo json
-    # contas = {}
-    # tarefas_dict = {}
-    # projetos_dict = {}
-
-
-    # data_folder = 'data'
-
-    # if not os.path.exists(data_folder):
-    #     os.makedirs(data_folder)
-
-    # data_file_tarefas = os.path.join(data_folder, 'tarefas.json')
-    # data_file_projetos = os.path.join(data_folder, 'projetos.json')
-    # data_file_contas = os.path.join(data_folder, 'contas.json')
-
-    # if os.path.exists(data_file_tarefas) and os.path.getsize(data_file_tarefas) > 0:
-    #     with open(data_file_tarefas, 'r') as f:
-    #         data = json.load(f)
-    #         if data:
-    #             tarefas_dict = {int(key): value for key,value in data.items()}
-    #         else:
-    #             tarefas_dict = {}
-
-    # if os.path.exists(data_file_projetos) and os.path.getsize(data_file_projetos) > 0:
-    #     with open(data_file_projetos, 'r') as f:
-    #         data = json.load(f)
-    #         if data:
-    #             projetos_dict = {int(key): value for key,value in data.items()}
-    #         else:
-    #             projetos_dict = {}
-
-    # if os.path.exists(data_file_contas) and os.path.getsize(data_file_contas) > 0:
-    #     with open(data_file_contas, 'r') as f:
-    #         data = json.load(f)
-    #         if data:
-    #             contas = {int(key): value for key,value in data.items()}
-    #         else:
-    #             contas = {}
-
-# subsitituir o sistema de keys 1,2,3,4,5 para uma geração de numeros aleatórios com sla 10 casas
-    # count = max(contas.keys(), default=0) + 1
-    # count_tarefas = max(tarefas_dict.keys(), default=0) + 1
-    # count_projetos = max(projetos_dict.keys(), default=0) + 1
-
 
     count_tarefas = 0
     count_projetos = 0
@@ -140,8 +94,11 @@ if __name__ == '__main__':
 4 - ver meus projetos
 5 - Adicionar pessoa em atividade
 6 - Adicionar pessoa em projeto
-choice: 
-"""))
+7 - Mudar data de uma tarefa
+8 - Adicionar tarefa a um projeto
+9 - Excluir tarefa
+10 - Excluir projeto
+choice: """))
         
         if choice == 0:
             sys.exit()
@@ -155,6 +112,7 @@ choice:
                 # Verifica se a data é no futuro
                 if data_vencimento.date() < date.today():
                     print("A data de vencimento não pode ser no passado. Digite uma data válida.")
+                    input()
                     continue
             except ValueError:
                 print("Formato de data inválido. Use o formato YYYY-MM-DD.")
@@ -203,11 +161,7 @@ choice:
             input()
 
         elif choice == 5:
-            id_tarefa = input("Digite o ID da tarefa: ")
-            email_pessoa = input("Digite o e-mail da pessoa que deseja adicionar: ")
-            index_pessoa = Usuario.buscar_por_email(email_pessoa)
-
-
+            id_tarefa_str = input("Digite o ID da tarefa: ")
             try:
                 # Tente converter a string do ID para inteiro
                 id_tarefa = int(id_tarefa_str)
@@ -215,9 +169,37 @@ choice:
                 input("ID da tarefa inválido. Digite um número válido.")
                 continue
 
+            email_pessoa = input("Digite o e-mail da pessoa que deseja adicionar: ")
+            index_pessoa = Usuario.buscar_por_email(email_pessoa)
+
+
+
             if index_pessoa is None:
                 input("Usuário não encontrado pelo e-mail...")
                 continue
 
             contaAtual.adicionar_pessoa(id_tarefa, index_pessoa)
 
+
+
+        elif choice == 6:
+            id_projeto = int(input("Digite o ID da projeto: "))
+
+            email_pessoa = input("Digite o e-mail da pessoa que deseja adicionar: ")
+            index_pessoa = Usuario.buscar_por_email(email_pessoa)
+
+
+
+            if index_pessoa is None:
+                input("Usuário não encontrado pelo e-mail...")
+                continue
+
+            contaAtual.adicionar_pessoa(id_projeto, index_pessoa)
+
+
+        elif choice == 7:
+            id_tarefa = input("Digite o ID da tarefa que deseja alterar a data: ")
+            nova_data = input("Digite a nova data (formato YYYY-MM-DD): ")
+            contaAtual.mudar_data_tarefa(id_tarefa, nova_data)
+
+        
