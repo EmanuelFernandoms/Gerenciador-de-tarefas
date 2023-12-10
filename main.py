@@ -203,4 +203,21 @@ choice:
             input()
 
         elif choice == 5:
-            pass
+            id_tarefa = input("Digite o ID da tarefa: ")
+            email_pessoa = input("Digite o e-mail da pessoa que deseja adicionar: ")
+            index_pessoa = Usuario.buscar_por_email(email_pessoa)
+
+
+            try:
+                # Tente converter a string do ID para inteiro
+                id_tarefa = int(id_tarefa_str)
+            except ValueError:
+                input("ID da tarefa inválido. Digite um número válido.")
+                continue
+
+            if index_pessoa is None:
+                input("Usuário não encontrado pelo e-mail...")
+                continue
+
+            contaAtual.adicionar_pessoa(id_tarefa, index_pessoa)
+

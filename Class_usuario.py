@@ -32,7 +32,7 @@ class Usuario:
     def __init__(self, nome, email, senha):
         self.nome = nome
         self.email = email
-        self.senha = senha
+        self.__senha = senha
         self.projetos = []
 
     def __str__(self):
@@ -84,19 +84,15 @@ class Usuario:
         count_projetos = max(tarefas_dict.keys(), default=0) + 1
 
 
+    def adicionar_pessoa(self, id_tarefa, index):
 
-
-    def excluir_tarefa(self, projeto, tarefa):
-        if tarefa in projeto.tarefas:
-            projeto.tarefas.remove(tarefa)
-            return True
-        else:
-            return False
+        id_tarefa = int(id_tarefa)
+        if id_tarefa not in tarefas_dict:
+            print("ID da tarefa não encontrado.")
+            return
         
+        contas[index]['tarefas'].append(id_tarefa)
 
+        with open(data_file_contas, 'w') as f:
+            json.dump(contas, f, indent=4)
 
-
-
-    def mudar_data_tarefa(self, tarefa, nova_data):
-        tarefa.data_vencimento = nova_data
-        return tarefa
